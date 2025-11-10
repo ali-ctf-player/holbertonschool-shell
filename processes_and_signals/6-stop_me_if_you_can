@@ -1,3 +1,3 @@
 #!/usr/bin/env bash
 #Process 
-pkill 4-to_infinity_and_beyond
+pkill -TERM 4-to_infinity_and_beyond
