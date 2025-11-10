@@ -1,7 +1,4 @@
 #!/usr/bin/env bash
 #Process 
 
-pgrep -f 4-to_infinity_and_beyond | while read -r pid; do
-    # Use /bin/kill indirectly via full path
-    /bin/kill "$pid"
-done
+pkill -f 4-to_infinity_and_beyond 
