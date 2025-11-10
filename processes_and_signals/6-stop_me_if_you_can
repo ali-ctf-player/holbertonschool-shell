@@ -1,10 +1,4 @@
 #!/usr/bin/env bash
 #Process 
 
-PID=$(pgrep -f 4-to_infinity_and_beyond)
-
-# If process exists
-if [ -n "$PID" ]; then
-  # Send SIGTERM using 'pkill' instead of 'kill'
-  pkill -f 4-to_infinity_and_beyond
-fi
+ps -ef | grep "[4]-to_infinity_and_beyond" | awk '{print $2}' | xargs -r kill
