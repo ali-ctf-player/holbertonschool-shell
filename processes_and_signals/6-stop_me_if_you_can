@@ -1,9 +1,11 @@
 #!/usr/bin/env bash
 #Process 
 
-PID=$(pgrep -f "4-to_infinity_and_beyond")
+PID=$(pgrep -f 4-to_infinity_and_beyond)
 
-# Use gdb to attach and send SIGTERM
+# Check if the process exists
 if [ -n "$PID" ]; then
-    gdb -q --batch --pid="$PID" -ex "call (int)exit(0)" -ex "detach" -ex "quit" >/dev/null 2>&1
+  # Send a SIGTERM signal via /proc interface (no kill command)
+  echo "Terminating process $PID..."
+  echo 15 > /proc/$PID/signal
 fi
