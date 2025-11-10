@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+#Process
+for pid in /proc/[0-9]*; do
+    if [ -r "$pid/comm" ]; then
+        comm=$(cat "$pid/comm")
+        if [[ "$comm" == *bash* ]]; then
+            echo "${pid##*/} $comm"
+        fi
+    fi
+done
