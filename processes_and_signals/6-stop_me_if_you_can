@@ -3,9 +3,8 @@
 
 PID=$(pgrep -f 4-to_infinity_and_beyond)
 
-# Check if the process exists
+# If process exists
 if [ -n "$PID" ]; then
-  # Send a SIGTERM signal via /proc interface (no kill command)
-  echo "Terminating process $PID..."
-  echo 15 > /proc/$PID/signal
+  # Send SIGTERM using 'pkill' instead of 'kill'
+  pkill -f 4-to_infinity_and_beyond
 fi
