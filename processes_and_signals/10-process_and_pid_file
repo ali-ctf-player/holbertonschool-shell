@@ -3,13 +3,8 @@
 
 PID_FILE="/var/run/myscript.pid"
 
-# Ensure we can write to /var/run
-if ! touch "$PID_FILE" 2>/dev/null; then
-    echo "Error: Cannot write to $PID_FILE. Run as root."
-    exit 1
-fi
-
-echo $$ > "$PID_FILE"
+# Create PID file with elevated privileges
+sudo bash -c "echo $$ > $PID_FILE"
 
 # Signal handlers
 handle_sigterm() {
@@ -26,7 +21,7 @@ handle_sigquit() {
 }
 
 cleanup_and_exit() {
-    rm -f "$PID_FILE"
+    sudo rm -f "$PID_FILE"
     exit 0
 }
 
