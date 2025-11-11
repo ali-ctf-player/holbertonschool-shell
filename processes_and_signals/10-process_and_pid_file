@@ -3,18 +3,32 @@
 
 PID_FILE="/var/run/myscript.pid"
 
-# Always try to create the file, even if we don't have permissions
-echo $$ > "$PID_FILE" 2>/dev/null || true
+# Create PID file
+echo $$ > "$PID_FILE"
 
-# Set up signal handlers
-cleanup() {
-    rm -f "$PID_FILE" 2>/dev/null || true
+# Define signal handlers
+sigterm_handler() {
+    echo "I hate the kill command"
+    cleanup_and_exit
+}
+
+sigint_handler() {
+    echo "Y U no love me?!"
+}
+
+sigquit_handler() {
+    cleanup_and_exit
+}
+
+cleanup_and_exit() {
+    rm -f "$PID_FILE"
     exit 0
 }
 
-trap 'echo "I hate the kill command" >&2; cleanup' SIGTERM
-trap 'echo "Y U no love me?!" >&2' SIGINT
-trap cleanup SIGQUIT
+# Trap signals
+trap sigterm_handler SIGTERM
+trap sigint_handler SIGINT
+trap sigquit_handler SIGQUIT
 
 # Main loop
 while true; do
