@@ -3,10 +3,13 @@
 
 PID_FILE="/var/run/myscript.pid"
 
-# Ensure directory exists
-mkdir -p /var/run 2>/dev/null
+# If /var/run doesn't exist, create it locally (not system-wide)
+if [ ! -d "/var/run" ]; then
+    mkdir -p "./var/run"
+    PID_FILE="./var/run/myscript.pid"
+fi
 
-# Create the PID file with the script's PID
+# Create PID file
 echo "$$" > "$PID_FILE"
 
 cleanup_and_exit() {
