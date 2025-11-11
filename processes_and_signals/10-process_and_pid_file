@@ -2,19 +2,33 @@
 #This is advanced process
 
 PID_FILE="/var/run/myscript.pid"
+
+# Create directory if it doesn't exist
+mkdir -p /var/run/
+
+# Write PID to file
 echo $$ > "$PID_FILE"
 
-cleanup(){
-	rm -rf "$PID_FILE"
-	exit 0
+# Function to handle SIGTERM
+handle_sigterm() {
+    echo "I hate the kill command" >&2
+    rm -f "$PID_FILE"
+    exit 0
 }
 
-trap 'echo "I hate the kill command"; cleanup' SIGTERM
-trap 'echo "Y U no love me?!"' SIGINT
-trap cleanup SIGQUIT
+# Function to handle SIGQUIT  
+handle_sigquit() {
+    rm -f "$PID_FILE"
+    exit 0
+}
 
+# Set up signal handlers
+trap handle_sigterm SIGTERM
+trap 'echo "Y U no love me?!" >&2' SIGINT
+trap handle_sigquit SIGQUIT
+
+# Main loop - display "To infinity and beyond" indefinitely
 while true; do
-	echo "To infinity and beyond"
-	sleep 1
+    echo "To infinity and beyond"
+    sleep 1
 done
-
