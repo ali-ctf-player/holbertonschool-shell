@@ -1,10 +1,14 @@
 #!/usr/bin/env bash
 # This script writes its PID to /var/run/myscript.pid, handles signals, and prints messages indefini
 
+SCRIPT_PATH="/home/student_jail/10-process_and_pid_file"
 PID_FILE="/var/run/myscript.pid"
 
-# Create PID file with elevated privileges
-sudo bash -c "echo $$ > $PID_FILE"
+# Start the script as student_jail
+su - student_jail -c "$SCRIPT_PATH" &
+
+# Save the PID of the background process
+echo $! > "$PID_FILE"
 
 # Signal handlers
 handle_sigterm() {
