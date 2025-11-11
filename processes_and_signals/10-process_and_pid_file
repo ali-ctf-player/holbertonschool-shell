@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 #This is advanced process
 
-PID_FILE="/var/run/script.pid"
+PID_FILE="/var/run/myscript.pid"
 echo $$ > "$PID_FILE"
 
 cleanup(){
