@@ -1,0 +1,20 @@
+#!/usr/bin/env bash
+#This is advanced process
+
+PID_FILE="/var/run/script.pid"
+echo $$ > "$PID_FILE"
+
+cleanup(){
+	rm -rf "$PID_FILE"
+	exit 0
+}
+
+trap 'echo "I hate the kill command"; cleanup' SIGTERM
+trap 'echo "Y U no love me?!"' SIGINT
+trap cleanup SIGQUIT
+
+while true; do
+	echo "To infinity and beyond"
+	sleep 1
+done
+
