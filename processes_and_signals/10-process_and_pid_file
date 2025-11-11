@@ -2,38 +2,33 @@
 # This script writes its PID to /var/run/myscript.pid, handles signals, and prints messages indefinitely.
 
 PID_FILE="/var/run/myscript.pid"
+echo $$ > "$PID_FILE"
 
-# If /var/run doesn't exist, create it locally (not system-wide)
-if [ ! -d "/var/run" ]; then
-    mkdir -p "./var/run"
-    PID_FILE="./var/run/myscript.pid"
-fi
+# Signal handlers
+handle_sigterm() {
+    echo "I hate the kill command"
+    cleanup_and_exit
+}
 
-# Create PID file
-echo "$$" > "$PID_FILE"
+handle_sigint() {
+    echo "Y U no love me?!"
+}
+
+handle_sigquit() {
+    cleanup_and_exit
+}
 
 cleanup_and_exit() {
     rm -f "$PID_FILE"
     exit 0
 }
 
-sigterm_handler() {
-    echo "I hate the kill command"
-    cleanup_and_exit
-}
+# Trap signals
+trap handle_sigterm SIGTERM
+trap handle_sigint SIGINT
+trap handle_sigquit SIGQUIT
 
-sigint_handler() {
-    echo "Y U no love me?!"
-}
-
-sigquit_handler() {
-    cleanup_and_exit
-}
-
-trap sigterm_handler SIGTERM
-trap sigint_handler SIGINT
-trap sigquit_handler SIGQUIT
-
+# Main loop
 while true; do
     echo "To infinity and beyond"
     sleep 1
