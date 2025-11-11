@@ -1,7 +1,14 @@
 #!/usr/bin/env bash
-# This script writes its PID to /var/run/myscript.pid, handles signals, and prints messages indefinitely.
+# This script writes its PID to /var/run/myscript.pid, handles signals, and prints messages indefini
 
 PID_FILE="/var/run/myscript.pid"
+
+# Ensure we can write to /var/run
+if ! touch "$PID_FILE" 2>/dev/null; then
+    echo "Error: Cannot write to $PID_FILE. Run as root."
+    exit 1
+fi
+
 echo $$ > "$PID_FILE"
 
 # Signal handlers
