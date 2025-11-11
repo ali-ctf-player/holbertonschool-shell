@@ -3,9 +3,8 @@
 
 PID_FILE="/var/run/myscript.pid"
 
-# Try creating the PID file (using sudo if needed)
+# Try to create PID file (with fallback if /var/run not writable)
 if ! echo "$$" > "$PID_FILE" 2>/dev/null; then
-    # fallback if /var/run is not writable in test environment
     PID_FILE="/tmp/myscript.pid"
     echo "$$" > "$PID_FILE"
 fi
