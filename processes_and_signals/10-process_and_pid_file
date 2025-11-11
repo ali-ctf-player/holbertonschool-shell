@@ -3,11 +3,11 @@
 
 PID_FILE="/var/run/myscript.pid"
 
-# Try to create PID file (with fallback if /var/run not writable)
-if ! echo "$$" > "$PID_FILE" 2>/dev/null; then
-    PID_FILE="/tmp/myscript.pid"
-    echo "$$" > "$PID_FILE"
-fi
+# Ensure directory exists
+mkdir -p /var/run 2>/dev/null
+
+# Create the PID file with the script's PID
+echo "$$" > "$PID_FILE"
 
 cleanup_and_exit() {
     rm -f "$PID_FILE"
