@@ -1,0 +1,62 @@
+#!/usr/bin/env bash
+# This script writes its PID to /var/run/myscript.pid, handles signals, and prints messages indefini
+
+# Init script to manage the manage_my_process daemon
+
+PID_FILE="/var/run/my_process.pid"
+DAEMON_SCRIPT="./manage_my_process"
+
+# Function to start the process
+start_process() {
+    # Start the process in background and get its PID
+    $DAEMON_SCRIPT &
+    DAEMON_PID=$!
+    
+    # Save PID to file
+    echo $DAEMON_PID > $PID_FILE
+    
+    echo "manage_my_process started"
+}
+
+# Function to stop the process
+stop_process() {
+    # Check if PID file exists
+    if [ -f "$PID_FILE" ]; then
+        # Read PID from file
+        PID=$(cat $PID_FILE)
+        
+        # Kill the process
+        kill $PID 2>/dev/null
+        
+        # Remove PID file
+        rm -f $PID_FILE
+    fi
+    
+    echo "manage_my_process stopped"
+}
+
+# Function to restart the process
+restart_process() {
+    stop_process
+    start_process
+    echo "manage_my_process restarted"
+}
+
+# Main script logic based on positional parameters
+case "$1" in
+    start)
+        start_process
+        ;;
+    stop)
+        stop_process
+        ;;
+    restart)
+        restart_process
+        ;;
+    *)
+        echo "Usage: manage_my_process {start|stop|restart}"
+        exit 1
+        ;;
+esac
+
+exit 0

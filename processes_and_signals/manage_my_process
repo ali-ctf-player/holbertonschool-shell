@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+# This script writes its PID to /var/run/myscript.pid, handles signals, and prints messages indefini
+while true
+do
+    echo "I am alive!" >> /tmp/my_process
+    sleep 2
+done
